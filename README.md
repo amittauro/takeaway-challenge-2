@@ -17,17 +17,24 @@ Takeaway Challenge
 Instructions
 -------
 
+* Challenge time: from now until Code Review! Your coach will specify this.
 * Feel free to use google, your notes, books, etc. but work on your own
+* Make sure you have written your own README that briefly explains your approach to solving the challenge.
 * If you refer to the solution of another coach or student, please put a link to that in your README
-* If you have a partial solution, **still check in a partial solution**
-* You must submit a pull request to this repo with your code by 9am Monday morning
+* Push your work and open a pull request to this repo before Code Review (it doesn't matter where you got to!)
+
+Set up
+-------
+
+1. Fork this repo
+2. `git clone ` this repository and `cd` into the directory.
+2. `gem install bundler` (if you don't have bundler already)
+3. `bundle install` the dependencies
+4. Complete the following task:
 
 Task
 -----
 
-* Fork this repo
-* Run the command 'bundle' in the project directory to ensure you have all the gems
-* Write a Takeaway program with the following user stories:
 
 ```
 As a customer
@@ -53,7 +60,7 @@ I would like to receive a text such as "Thank you! Your order was placed and wil
   * The text sending functionality should be implemented using Twilio API. You'll need to register for it. It’s free.
   * Use the twilio-ruby gem to access the API
   * Use the Gemfile to manage your gems
-  * Make sure that your Takeaway is thoroughly tested and that you use mocks and/or stubs, as necessary to not to send texts when your tests are run
+  * Make sure that your tests are isolated apprpriately tested to not to send texts when your tests are run
   * However, if your Takeaway is loaded into IRB and the order is placed, the text should actually be sent
   * Note that you can only send texts in the same country as you have your account. I.e. if you have a UK account you can only send to UK numbers.
 

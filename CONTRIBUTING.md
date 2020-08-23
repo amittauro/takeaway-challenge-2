@@ -1,21 +1,26 @@
-Tech Test Submission Requirements/Guidelines
-======
+## Contributing
 
-Before submitting your test, please review the requirements/guidelines below. Note that the requirements are mandatory and if you do not satisfy them we won't review your code (we don't mean to be harsh but this is based on the minimum expectations that our hiring partners require when you submit code for tech tests).
+#### Opening a [Pull Request](https://docs.github.com/en/github/collaborating-with-issues-and-pull-requests/about-pull-requests)
 
-Requirements
-------
+Remember to open your pull request before Code Review, but you don't need to wait until you've finished to open it! You can continue to push code and the Pull Request will automatically update with the new work.
 
-* Make sure you have written your own README that briefly explains your approach to solving the challenge.
-* If your code isn't finished it's not ideal but acceptable as long as you explain in your README where you got to and how you would plan to finish the challenge.
-* All code must be written test-first - we're looking for 100% test coverage or as near as possible to that figure.
-  * The test coverage statistics `SimpleCov` generates after your tests will show you what your coverage is like and where it's lacking.
-* Ensure all your tests are passing.
-* Check your code conforms to the [Rubocop](https://github.com/bbatsov/rubocop) style guide. Run `rubocop`, read and digest what it says, fix the violations and then run `rubocop` again to check. When you're done, commit and push.
-  * Advanced mode: run `rubocop` before every commit you make and fix mistakes before you even commit!
+1. Push your work to your remote repository
+2. Navigate to your repository on GitHub and click on the `Pull Requests` tab next to `Code`.
+3. Click on `New Pull Request`
+4. Add a description and Create!
+5. Continue to push work
 
-Guidelines
--------
+#### README
 
-* Ensure you've understood the specification and built the code according to the challenge guidelines.
-* Read through [Code Reviews&nbsp;:pill:](https://github.com/makersacademy/course/blob/master/pills/code_reviews.md) to understand what we're looking for in your code.
+Rewrite the project README, or add an additional markdown file that has the following
+
+- Instructions for installing your program
+- Instructions for running your tests
+- Instructions for running your program
+- Documentation of your approach - including any domain models and diagrams that you used
+- Documentation of your learnings and reflections
+- Documentation of next steps
+
+#### Review Guidance
+
+Check out the [review guidance](./docs/review.md) to help you identify improvements to make - and then make them!

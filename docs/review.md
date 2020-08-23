@@ -58,16 +58,17 @@ We already talked about ["Vacuous" tests](https://github.com/makersacademy/airpo
 
 ```ruby
 it 'sends a payment confirmation text message' do
-  expect(subject).to receive(:send_sms)
-  subject.send_sms(20.93)
+  takeaway = Takeaway.new
+  allow(takeaway).to receive(:send_sms) { 'sent!'}
+  expect(takeaway.send_sms(20.93)).to eq 'sent!'
 end
 ```
 
-In the above the `expect(subject).to receive(:send_sms)` command "stubs" out any existing method called `send_sms` on the subject.  Using `expect` instead of `allow` means that at the end of the it block, RSpec checks that subject did receive the message `send_sms`, which we have ensured by calling `subject.send_sms`, so this test passes without ever touching the application code.
+In the above the `allow(takeaway).to receive(:send_sms)` command "stubs" out any existing method called `send_sms` on the subject. By asserting that the return value of this stub is what we stubbed means that this test passes without ever touching the application code.
 
 You can confirm this test is 'vacuous' by checking that the [test coverage](https://github.com/makersacademy/course/blob/master/pills/test_coverage.md) doesn't change when you remove it.
 
-In general you shouldn't be stubbing out behaviour on the object under test.  The two key exceptions are when you have randomness or a 3rd party API.  We saw how to [stub random behaviour](https://github.com/makersacademy/airport_challenge/blob/master/docs/review.md#handling-randomness-in-tests) in the airport challenge code review, but how do we stub a 3rd party API?  See the next section.
+In general you shouldn't be stubbing out behaviour on the object under test.  The two key exceptions are when you have randomness or a 3rd party API.  We saw how to [stub random behaviour](https://github.com/makersacademy/airport-challenge/blob/master/docs/review.md#stub-randomness-in-tests) in the airport challenge code review, but how do we stub a 3rd party API?  See the next section.
 
 ## Stubbing the Twilio API
 
@@ -94,15 +95,11 @@ can be stubbed out like so:
 
 ```ruby
 describe Takeaway
-  subject(:takeaway) { described_class.new }
-
-  before do
-    allow(takeaway).to receive(:send_text)
-  end
-
   it 'sends a payment confirmation text message' do
-    expect(takeaway).to receive(:send_text).with("Thank you for your order: £20.93")
-    takeaway.complete_order(20.93)
+    takeaway = Takeaway.new
+    allow(takeaway).to receive(:send_text)
+    allow(takeaway).to receive(:send_text) { 'sent!'}
+    expect(takeaway.complete_order(20.93)).to eq 'sent'
   end
 end
 ```
@@ -111,9 +108,9 @@ This ensures that Takeaway#complete_order gets some test coverage and that no SM
 
 ## Unit vs Integration tests
 
-Note that if you create real objects (not doubles) in your unit tests other than that which is the subject, then you are using the [Chicago style)[http://programmers.stackexchange.com/questions/123627/what-are-the-london-and-chicago-schools-of-tdd] of unit testing (also called [integration testing](http://stackoverflow.com/a/7876055/316729)).  In general you want to separate up your unit from your integration (or "feature") tests.  Unit tests can just rest in the root of the spec folder, but features of integration tests should go in a subfolder (spec/features or spec/integration) or even in a separate folder on the root directory to allow them to run completely separately.
+Note that if you create real objects (not doubles) in your unit tests other than that which is the subject, then you are using the [Chicago style)[http://programmers.stackexchange.com/questions/123627/what-are-the-london-and-chicago-schools-of-tdd] of unit testing (also called [integration testing](http://stackoverflow.com/a/7876055/316729)).  In general you want to separate  your unit from your integration (or "feature") tests.  Unit tests can just rest in the root of the spec folder, but features of integration tests should go in a subfolder (spec/features or spec/integration) or even in a separate folder on the root directory to allow them to run completely separately.
 
-At Makers Academy we recommend using the London style with doubles to effectively isolate the single class being tested in a unit test.
+At Makers we recommend using the London style with doubles to effectively isolate the single class being tested in a unit test.
 
 ```ruby
 # London Style
@@ -122,6 +119,10 @@ describe Order do
   subject(:order) { described_class.new(menu) }
 
   it 'order total to be sum of items added' do
+    menu = test_double('a menu')
+    allow(menu).to receive(:price) { '£1.00' }
+    allow(menu?).to receive(:contains?) { true }
+    order = Order.new(menu)
     order.add('Pizza')
     order.add('Pizza')
     expect(order.total).to eq '£2.00'
@@ -132,9 +133,8 @@ end
 ```ruby
 # Chicago Style --> arguably an 'integration' or 'feature' test
 describe Order do
-  subject(:order) { described_class.new(Menu.new) } # note real Menu class
-
   it 'order total to be sum of items added' do
+    order = Order.new(Menu.new) # note real Menu class
     order.add('Pizza')
     order.add('Pizza')
     expect(order.total).to eq '£2.00'
@@ -196,12 +196,15 @@ The [Law of Demeter](https://en.wikipedia.org/wiki/Law_of_Demeter) suggests that
 * Each object should only talk to its friends; don't talk to strangers.
 * Only talk to your immediate friends.
 
-The following test shows a process of reaching through a series of related objects.  The warning sign is the multiple periods in `subject.menu.dishes.length`.  Here we are seeing `Restaurant` is being tested for properties that belong to the menu - effectively they are none of restaurant's business and shouldn't be tested here; and we shouldn't see deep-reaching chains like this in application code either:
+The following test shows a process of reaching through a series of related objects.  The warning sign is the multiple periods in `restaurant.menu.dishes.length`.  Here we are seeing `Restaurant` is being tested for properties that belong to the menu - effectively they are none of restaurant's business and shouldn't be tested here; and we shouldn't see deep-reaching chains like this in application code either:
 
 ```ruby
 describe Restaurant do
   it "has 2 items on the menu" do
-    expect(subject.menu.dishes.length).to eq(2)
+    dishes = # a set of dishes
+    menu = Menu.new(dishes)
+    restaurant = Restaurant.new(menu)
+    expect(restaurant.menu.dishes.length).to eq(2)
   end
 end
 ```
@@ -215,7 +218,7 @@ It is likely that the `Restaurant` (or equivalent) class is dependent on another
 ```ruby
 class Restaurant
   def initialize()
-    @mmessager = Messager.new
+    @messager = Messager.new
   end
 end
 ...
