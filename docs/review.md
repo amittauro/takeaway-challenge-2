@@ -54,7 +54,7 @@ The README is a great place to show the full story of how your app is used (from
 
 ## Tests should test real behaviours not stubs
 
-We already talked about ["Vacuous" tests](https://github.com/makersacademy/airport_challenge/blob/master/docs/review.md#vacuous-tests) in the airport challenge code review.  The example there focused on how we shouldn't test the behaviour of a double; but we can get into similar trouble if we are stubbing a real object, e.g.
+We can get into trouble if we are stubbing a real object, e.g.
 
 ```ruby
 it 'sends a payment confirmation text message' do
@@ -97,7 +97,6 @@ can be stubbed out like so:
 describe Takeaway
   it 'sends a payment confirmation text message' do
     takeaway = Takeaway.new
-    allow(takeaway).to receive(:send_text)
     allow(takeaway).to receive(:send_text) { 'sent!'}
     expect(takeaway.complete_order(20.93)).to eq 'sent'
   end
