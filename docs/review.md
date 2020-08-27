@@ -118,7 +118,7 @@ describe Order do
   it 'order total to be sum of items added' do
     menu = test_double('a menu')
     allow(menu).to receive(:price) { '£1.00' }
-    allow(menu?).to receive(:contains?) { true }
+    allow(menu).to receive(:contains?) { true }
     order = Order.new(menu)
     order.add('Pizza')
     order.add('Pizza')
@@ -214,7 +214,7 @@ It is likely that the `Restaurant` (or equivalent) class is dependent on another
 
 ```ruby
 class Restaurant
-  def initialize()
+  def initialize
     @messager = Messager.new
   end
 end
