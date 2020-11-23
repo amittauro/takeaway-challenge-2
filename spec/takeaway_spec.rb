@@ -20,36 +20,6 @@ describe Takeaway do
       end
     end
   end
-
-  describe '#add_item' do
-    let (:takeaway) {Takeaway.new}
-    context 'when adding items to the order' do
-      it 'add the order to the basket' do
-        expect(takeaway.add_item(item: 'pizza', quantity: 2)).to eq({
-          'pizza' => 2
-          })
-      end
-
-      it 'doesnt add order if not on menu' do
-        expect(takeaway.add_item(item: 'pazza', quantity: 2)).to eq(
-          'sorry this item is not on the menu')
-      end
-    end
-  end
-
-  describe '#place_order' do
-    context 'when placing an order' do
-      it 'sends a text if sum of order matches total' do
-        takeaway = Takeaway.new
-        (takeaway.add_item(item: 'pizza', quantity: 2))
-        expect(takeaway.place_order(20).sid.length).to eq(34)
-        expect(takeaway.place_order(20).sid).to be_a(String)
-        expect(takeaway.place_order(20).sid[0..1]).to eq('SM')
-        expect(takeaway.place_order(20).body).to eq(
-          "Thank you your order was placed and will be delivered at #{(Time.now + 3600).strftime('%H:%M')}")
-      end
-    end
-  end
 end
 
 # require 'twilio-ruby'
