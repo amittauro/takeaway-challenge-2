@@ -1,5 +1,2 @@
-/**/.DS_Store
-/coverage
-
-# Local cache of Rubocop remote config
-.rubocop-*
+/spec/test_variables.rb
+/twilio_variables.rb

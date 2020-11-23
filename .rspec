@@ -1,0 +1,3 @@
+--require test_variables
+--require spec_helper
+--format documentation
